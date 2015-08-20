@@ -1,8 +1,11 @@
 #[macro_use]
 extern crate clap;
+
 use clap::App;
 use std::process;
 use std::io::Write;
+
+mod display;
 
 fn run() -> Result<(), &'static str> {
     let args = App::new("Game of Life")
@@ -26,7 +29,7 @@ fn run() -> Result<(), &'static str> {
         }
     };
 
-    println!("Size: {} x {}", width, height);
+    display::display(width, height);
     Ok(())
 }
 
