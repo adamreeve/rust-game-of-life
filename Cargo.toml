@@ -1,0 +1,7 @@
+[package]
+name = "game-of-life"
+version = "0.1.0"
+authors = ["Adam Reeve <adreeve@gmail.com>"]
+
+[dependencies]
+clap = "~1.2.1"
