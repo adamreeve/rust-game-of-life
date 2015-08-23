@@ -1,3 +1,5 @@
+#![feature(custom_derive)]
+
 #[macro_use]
 extern crate clap;
 
@@ -6,6 +8,7 @@ use std::process;
 use std::io::Write;
 
 mod display;
+mod state;
 
 fn run() -> Result<(), String> {
     let args = App::new("Game of Life")
