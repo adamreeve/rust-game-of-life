@@ -7,7 +7,7 @@ use std::io::Write;
 
 mod display;
 
-fn run() -> Result<(), &'static str> {
+fn run() -> Result<(), String> {
     let args = App::new("Game of Life")
         .version(&crate_version!()[..])
         .about("Plays Conway's Game of Life")
@@ -16,21 +16,20 @@ fn run() -> Result<(), &'static str> {
              -h --height=[HEIGHT] 'Sets the height of the game, default=40'")
         .get_matches();
 
-    let width: u32 = match args.value_of("WIDTH").unwrap_or("40").parse() {
+    let width: usize = match args.value_of("WIDTH").unwrap_or("40").parse() {
         Ok(val) => val,
         Err(_) => {
-            return Err("Invalid width specified");
+            return Err("Invalid width specified".to_string());
         }
     };
-    let height: u32 = match args.value_of("HEIGHT").unwrap_or("40").parse() {
+    let height: usize = match args.value_of("HEIGHT").unwrap_or("40").parse() {
         Ok(val) => val,
         Err(_) => {
-            return Err("Invalid height specified");
+            return Err("Invalid height specified".to_string());
         }
     };
 
-    display::display(width, height);
-    Ok(())
+    display::display(width, height)
 }
 
 fn main() {
