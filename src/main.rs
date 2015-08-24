@@ -8,6 +8,7 @@ use std::process;
 use std::io::Write;
 
 mod display;
+mod game;
 mod state;
 
 fn run() -> Result<(), String> {
