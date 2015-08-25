@@ -46,7 +46,12 @@ pub fn run(mut world_state: life::WorldState) -> Result<(), String> {
                 'q' => break 'run,
                 'p' => { game_state.running = !game_state.running; }
                 ' ' => { toggle_cell(&game_state, &mut world_state); }
-                _   => {},
+                // For some reason, up down left right are mapped to A B C D
+                'A' => { move_cursor(&mut game_state, 0, -1); }
+                'B' => { move_cursor(&mut game_state, 0, 1); }
+                'C' => { move_cursor(&mut game_state, 1, 0); }
+                'D' => { move_cursor(&mut game_state, -1, 0); }
+                _ => {}
             }
         }
 
@@ -56,7 +61,6 @@ pub fn run(mut world_state: life::WorldState) -> Result<(), String> {
         }
 
         display_game(&mut term, &world_state);
-        display_cursor(&mut term, &game_state);
 
         let iter_label = format!("Iteration: {}", game_step);
         write_text(&mut term, &iter_label, 0, -3);
@@ -64,6 +68,8 @@ pub fn run(mut world_state: life::WorldState) -> Result<(), String> {
         write_text(&mut term, &state_label, 0, -2);
         let quit_label = "Q to quit";
         write_text(&mut term, &quit_label, 0, -1);
+
+        display_cursor(&mut term, &game_state);
 
         tryterm!(term.swap_buffers());
         sleep_ms(50);
@@ -80,6 +86,11 @@ fn toggle_cell(game_state: &GameState, world_state: &mut life::WorldState) {
         life::CellState::Alive => { world_state.set_cell(position, life::CellState::Dead); },
         life::CellState::Dead => { world_state.set_cell(position, life::CellState::Alive); },
     }
+}
+
+fn move_cursor(game_state: &mut GameState, xmove: i32, ymove: i32) {
+    game_state.cursor_x += xmove;
+    game_state.cursor_y += ymove;
 }
 
 fn display_game(term: &mut Terminal, world_state: &life::WorldState) {
