@@ -37,6 +37,10 @@ pub fn run(mut world_state: life::WorldState) -> Result<(), String> {
     let mut game_state = GameState::new();
     let mut game_step = 0;
 
+    let ui_period = 20;
+    let tick_mult = 25;
+    let mut tick_countdown = tick_mult;
+
     tryterm!(term.clear());
     tryterm!(term.swap_buffers());
     'run: loop {
@@ -56,8 +60,12 @@ pub fn run(mut world_state: life::WorldState) -> Result<(), String> {
         }
 
         if game_state.running {
-            world_state = life::tick(world_state);
-            game_step += 1;
+            tick_countdown -= 1;
+            if tick_countdown == 0 {
+                world_state = life::tick(world_state);
+                game_step += 1;
+                tick_countdown = tick_mult;
+            }
         }
 
         display_game(&mut term, &world_state);
@@ -72,7 +80,7 @@ pub fn run(mut world_state: life::WorldState) -> Result<(), String> {
         display_cursor(&mut term, &game_state);
 
         tryterm!(term.swap_buffers());
-        sleep_ms(50);
+        sleep_ms(ui_period);
     }
     Ok(())
 }
