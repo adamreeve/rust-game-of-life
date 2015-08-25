@@ -4,8 +4,8 @@ use std::collections::hash_set;
 
 #[derive(Clone,Copy,PartialEq,Eq,Hash)]
 pub struct CellPosition {
-    x: i32,
-    y: i32
+    pub x: i32,
+    pub y: i32
 }
 
 #[derive(PartialEq,Eq,Clone,Copy)]
