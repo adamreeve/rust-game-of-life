@@ -8,8 +8,7 @@ use std::process;
 use std::io::Write;
 
 mod display;
-mod game;
-mod state;
+mod life;
 
 fn run() -> Result<(), String> {
     let args = App::new("Game of Life")
