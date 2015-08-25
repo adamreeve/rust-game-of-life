@@ -45,8 +45,8 @@ impl WorldState {
 
     pub fn neighbours(&self, cell: CellPosition) -> Vec<CellPosition> {
         let mut neighbours = Vec::with_capacity(8);
-        for xdif in -1..1 {
-            for ydif in -1..1 {
+        for xdif in -1..2 {
+            for ydif in -1..2 {
                 if !(xdif == 0 && ydif == 0) {
                     let neighbour = CellPosition {
                         x: cell.x + xdif,
@@ -76,9 +76,9 @@ pub fn tick(world: WorldState) -> WorldState {
     let mut cells_to_visit = HashSet::new();
 
     let alive_cells = world.alive_cells();
-    for cell in alive_cells {
-        cells_to_visit.insert(*cell);
-        for neighbour in world.neighbours(*cell) {
+    for &cell in alive_cells {
+        cells_to_visit.insert(cell);
+        for neighbour in world.neighbours(cell) {
             cells_to_visit.insert(neighbour);
         }
     }
