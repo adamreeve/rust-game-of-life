@@ -6,3 +6,4 @@ authors = ["Adam Reeve <adreeve@gmail.com>"]
 [dependencies]
 clap = "~1.2.1"
 rustty = "~0.1.8"
+combine = "~1.0.0"

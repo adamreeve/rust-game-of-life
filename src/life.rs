@@ -1,6 +1,7 @@
-use std::vec::Vec;
 use std::collections::HashSet;
 use std::collections::hash_set;
+use std::iter::FromIterator;
+use std::vec::Vec;
 
 #[derive(Clone,Copy,PartialEq,Eq,Hash)]
 pub struct CellPosition {
@@ -97,4 +98,15 @@ pub fn tick(world: WorldState) -> WorldState {
         next_world_state.set_cell(cell, new_cell_state);
     }
     next_world_state
+}
+
+impl FromIterator<CellPosition> for WorldState {
+    fn from_iter<T>(iterator: T) -> Self
+    where T: IntoIterator<Item=CellPosition> {
+        let mut world = WorldState::new();
+        for pos in iterator {
+            world.set_cell(pos, CellState::Alive);
+        }
+        world
+    }
 }

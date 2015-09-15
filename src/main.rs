@@ -2,6 +2,7 @@
 
 #[macro_use]
 extern crate clap;
+extern crate combine;
 
 use clap::App;
 use std::process;
@@ -9,14 +10,23 @@ use std::io::Write;
 
 mod game;
 mod life;
+mod import;
 
 fn run() -> Result<(), String> {
-    App::new("Game of Life")
+    let args = App::new("Game of Life")
         .version(&crate_version!()[..])
         .about("Plays Conway's Game of Life")
+        .args_from_usage(
+            "-i --input=[INPUT_FILE] 'A starting state in Life 1.06 format'")
         .get_matches();
 
-    let world = life::WorldState::new();
+    let world = match args.value_of("INPUT_FILE") {
+        Some(path) => match import::load_file(path) {
+            Ok(world) => world,
+            Err(err) => return Err(err)
+        },
+        None => life::WorldState::new(),
+    };
     game::run(world)
 }
 
