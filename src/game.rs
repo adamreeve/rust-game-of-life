@@ -1,6 +1,7 @@
 extern crate rustty;
 
 use self::rustty::{Terminal,Event};
+use std::cmp::{min, max};
 use std::thread::sleep_ms;
 
 use life;
@@ -59,6 +60,10 @@ pub fn run(mut world_state: life::WorldState) -> Result<(), String> {
             }
         }
 
+        // Make sure cursor doesn't go out of view, either
+        // by the user moving it or from a terminal resize
+        constrain_cursor(&mut game_state, &term);
+
         if game_state.running {
             tick_countdown -= 1;
             if tick_countdown == 0 {
@@ -99,6 +104,17 @@ fn toggle_cell(game_state: &GameState, world_state: &mut life::WorldState) {
 fn move_cursor(game_state: &mut GameState, xmove: i32, ymove: i32) {
     game_state.cursor_x += xmove;
     game_state.cursor_y += ymove;
+}
+
+fn constrain_cursor(game_state: &mut GameState, term: &Terminal) {
+    let (_cols, _rows) = term.size();
+    let cols = _cols as i32;
+    let rows = _rows as i32;
+    let new_x = min(max(game_state.cursor_x, 0), cols - 1);
+    let new_y = min(max(game_state.cursor_y, 0), rows - 1);
+
+    game_state.cursor_x = new_x;
+    game_state.cursor_y = new_y;
 }
 
 fn display_game(term: &mut Terminal, world_state: &life::WorldState) {
